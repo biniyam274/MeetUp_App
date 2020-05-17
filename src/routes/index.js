@@ -7,7 +7,6 @@ import Profile from '../components/User/profile.vue'
 import MeetUps from '../components/MeetUp/meetups.vue'
 import MeetUp from '../components/MeetUp/meetup.vue'
 import CreatMeetUp from '../components/MeetUp/createmeetup.vue'
-import DeleteMeetup from '../components/Shared/RegisterDialog'
 
 Vue.use(Router)
 export default new Router({
@@ -44,13 +43,6 @@ export default new Router({
       path: '/meetup/new',
       name: 'createmeetup',
       component: CreatMeetUp,
-      props: true
-    }
-    ,
-    {
-      path: '/meetup/delete/:id',
-      name: 'deletemeetup',
-      component: DeleteMeetup,
       props: true
     }
     ,

@@ -11,37 +11,55 @@ class UserController extends Controller
 {
     public function signup(Request $request)
     {
+        $messages = [
+            'email.required'    => 'The :email filed is needed.',
+            'password.required'    => 'The password filed is needed.',
+            'name.required'    => 'The Name filed is needed.',
+            'name.unique'    => 'The Name filed should be unique.',
+            'email.required'    => 'The Email filed should be unique.',
+        ];
         $validator = Validator::make($request->all(), [
-            'username' => 'required',
-            'email' =>'required',
-            'password'=> 'required'
-        ]);
-       
+            'name' => 'required|unique:users',
+            'email' => 'required|email|unique:users',
+            'password' => 'required'
+        ],$messages);
+
         if ($validator->fails()) {
-            return response()->json(["error"=>$validator->errors(),"request"=>$request->all()]);
-        }else{
+            return response()->json(['errors'=>$validator->errors()]);
+        }
+
         $user = new User();
         $user->email = $request->input('email');
         $user->password = Hash::make($request->input('password'));
-        $user->name = $request->input('username');
+        $user->name = $request->input('name');
+       
         $user->save();
+        unset($user->password);
         return response()->json([
             "user"=>$user,
             "meetups"=>$user->meetups()
         ]);
-        }
-        return json_encode($request->all());
+        
     }
 
 
-
+    
     public function signin(Request $request)
     {
-        $validator = $request->validate([
-            'email' =>'required',
-            'password'=> 'required'
-        ]);
-        if (!Auth::attempt($validator)) {
+        $messages = [
+            'email.required'    => 'The :email filed is needed.',
+            'password.required'    => 'The password filed is needed.',
+        ];
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required'
+            
+        ],$messages);
+        if ($validator->fails()) {
+            return response()->json(['errors'=>$validator->errors()]);
+        
+        }
+        if (!Auth::attempt($request->only(['email','password']))) {
             return response()->json([
                 'error' => 'Unauthorized',
         ], 401);
@@ -49,11 +67,14 @@ class UserController extends Controller
         $accsessToken = Auth::user()->createToken('authToken')->accessToken;
         $user = Auth::user();
         unset($user["password"]);
+
         return response()->json([
             'user'=>$user,
             'access_token' => $accsessToken,
             "meetups"=>$user->meetups()->get('id')
         ]);
+
+        
     }
 
     /**

@@ -43,7 +43,7 @@ class MeetupController extends Controller
             'title' => 'required|min:5',
             'description' => 'required',
             'location' => 'required',
-            'imageUrl' => 'required|image',
+            'imageUrl' => 'required',
             'date' => 'required',
             'user_id' => 'required',
 
@@ -54,10 +54,10 @@ class MeetupController extends Controller
         } else {
 
             //Upload Image 
-            $extension = $request->imageUrl->getClientOriginalExtension();
-            $filename = $request->imageUrl->getFilename() . "." . $extension;
-            $request->imageUrl->move(public_path('images'), $filename);
-
+            // $extension = $request->imageUrl->getClientOriginalExtension();
+            // $filename = $request->imageUrl->getFilename() . "." . $extension;
+            // $request->imageUrl->move(public_path('images'), $filename);
+            $filename = $request->imageUrl;
             // Create Meetup
             $meetup = new Meetup();
 

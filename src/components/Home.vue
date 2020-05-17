@@ -13,12 +13,21 @@
           <v-carousel-item
             v-for="(item, i) in this.meetups"
             :key="i"
+            
+            @click="onLoadMeetUp(item.id)"
+            reverse-transition="fade-transition"
+            transition="fade-transition"
+            
+          >
+          <!-- <v-carousel-item
+            v-for="(item, i) in this.meetups"
+            :key="i"
             :src="require('../../server/public/' + item.imageUrl)"
             @click="onLoadMeetUp(item.id)"
             reverse-transition="fade-transition"
             transition="fade-transition"
             alt="No Image"
-          >
+          > -->
             <div class="title">{{ item.title }}</div>
           </v-carousel-item>
         </v-carousel>
@@ -61,7 +70,13 @@ export default {
     this.$store.dispatch("getMeetups");
     }
      this.meetups = this.$store.getters.loadedMeetups;
-  }
+  },
+  mounted() {
+    if (this.getUser == null && this.getUser == undefined) {
+      this.$router.push("/signin");
+    }
+     this.meetups = this.$store.getters.loadedMeetups;
+  },
 };
 </script>
 <style scoped>

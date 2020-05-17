@@ -3,8 +3,7 @@ import Vuex from "vuex";
 import axios from "axios";
 Vue.use(Vuex);
 
-const url = "http://127.0.0.1:8000/api";
-
+const url = "http://localhost:8000/api";
 export const store = new Vuex.Store({
   state: {
     loadedMeetups: null,
@@ -22,15 +21,16 @@ export const store = new Vuex.Store({
         element.id = id
       });
     },
-    loadMeetups(state, payload) {
-      state.loadedMeetups = payload;
-    },
     UpdateMeetups(state, payload) {
       state.loadedMeetups = payload;
     },
     setUser(state, payload) {
       state.user = payload;
     },
+    unsetUser(state) {
+      state.user = null;
+    }
+    ,
     setLoading(state, payload) {
       state.loading = payload;
     },
@@ -47,9 +47,19 @@ export const store = new Vuex.Store({
     clearToken(state){
       state.token = null;
       localStorage.setItem('access_token',"");
+    },
+    resetState(state){
+      state.loadedMeetups= null
+      state.user = null
+      state.loading = false
+      state.error = null
+      state.token = null
     }
   },
   actions: {
+    logout({commit}){
+        commit('resetState')
+    },
     getMeetups({commit}) {
       commit("setLoading", true);
       axios
@@ -62,7 +72,7 @@ export const store = new Vuex.Store({
         .catch(
           error => {
             commit("setLoading", false);
-            console.error(error)}
+            console.log(error)}
           
           );
     },
@@ -80,7 +90,6 @@ export const store = new Vuex.Store({
      
     },
     deleteMeetup({commit},id) {
-      
       axios
         .delete("http://127.0.0.1:8000/api/meetup/"+id)
         .then(response => {
@@ -90,34 +99,34 @@ export const store = new Vuex.Store({
         .catch(response => console.log(response));
      
     },
-    fetchAllMeetups({ commit }, meetups) {
-      commit("loadMeetups", meetups);
-    },
     signUserUp({ commit }, payload) {
       commit("setLoading", true);
       axios
         .post(url + "/signup", {
-          username: payload.username,
+          name: payload.name,
           email: payload.email,
           password: payload.password
         })
         .then(response => {
-          if(response.data.error !== null){
-            commit("setError", response.data.error);
-          }
+          console.log(response.data);
           commit("setLoading", false);
-          const newUser ={
-            id:response.data.user.id,
-            registeredMeetups:response.data.meetups
+          if(response.data.errors !== null){
+            commit("setError", response.data.errors);
           }
-          
-          console.log("User Data:"+response.data);
-          commit("setUser",newUser );
+          //if user found 
+          if(response.data.user){
+            const newUser ={
+              id:response.data.user.id,
+              registeredMeetups:response.data.meetups
+            }
+            console.log("User Data:"+response.data);
+            commit("setUser",newUser );
+          }
         })
         .catch(error => {
           commit("setLoading", false);
           commit("setError", error);
-          console.error(error);
+          console.log(error);
         });
     },
     signUserIn({ commit }, payload) {
@@ -128,23 +137,28 @@ export const store = new Vuex.Store({
           password: payload.password
         })
         .then(response => {
+          console.log(response.data);
           let access_token = response.data.access_token;
-          let error = response.data.error;
-          if(error !== null){
-            commit("setError", error);
+          let errors = response.data.errors;
+          if(errors !== null){
+            
+            commit("setError", errors);
           }
           if(access_token !== null){
             //save data
             commit("setToken", access_token);
           }
           commit("setLoading", false);
-          
+
+          //if user found
+         if(response.data.user){
           const newUser ={
             id:response.data.user.id,
             registeredMeetups:response.data.meetups
           }
           console.log("User Data:"+response.data);
           commit("setUser",newUser );
+         }
         })
         .catch(error => {
           commit("setLoading", false);

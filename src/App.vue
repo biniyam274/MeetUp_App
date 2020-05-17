@@ -1,6 +1,6 @@
 <template>
-  <v-app id="inspire">
-    <v-navigation-drawer v-model="drawer" app>
+  <v-app id="inspire" app>
+    <v-navigation-drawer v-model="drawer" >
       <v-list dense>
         <v-list-item link>
           <v-list-item-action>
@@ -26,9 +26,9 @@
             <v-list-item-title>Profile</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-         <v-list-item link>
+        <v-list-item link>
           <v-list-item-action>
-            <v-btn small color="primary" to="/logout">Logout</v-btn>
+            <v-btn small color="primary" @click="logout">Logout</v-btn>
           </v-list-item-action>
         </v-list-item>
       </v-list>
@@ -41,43 +41,43 @@
         </v-btn>
       </v-toolbar-title>
       <v-layout>
-        <template v-if="getUser ">
-         <v-spacer></v-spacer>
-        <v-flex class="text-right">
-          <v-btn text to="/meetups"> MeetUps </v-btn>
-        </v-flex>
-        <v-flex class="text-center">
-          <v-btn text to="/meetup/new">
-            <v-icon>mdi-plus</v-icon>
-            Organize meetUp
-          </v-btn>
-        </v-flex>
-        <v-flex class="text-left">
-          <v-btn text to="/profile">
-            <span>
-              <v-icon text left>mdi-account</v-icon>
-              Profile
-            </span>
-          </v-btn>
-        </v-flex>
+        <template v-if="getUser">
+          <v-spacer></v-spacer>
+          <v-flex class="text-right">
+            <v-btn text to="/meetups"> MeetUps </v-btn>
+          </v-flex>
+          <v-flex class="text-center">
+            <v-btn text to="/meetup/new">
+              <v-icon>mdi-plus</v-icon>
+              Organize meetUp
+            </v-btn>
+          </v-flex>
+          <v-flex class="text-left">
+            <v-btn text to="/profile">
+              <span>
+                <v-icon text left>mdi-account</v-icon>
+                Profile
+              </span>
+            </v-btn>
+          </v-flex>
         </template>
         <template v-else>
-         <v-flex class="text-center">
-          <v-btn text to="/signup">
-            <span>
-              <v-icon small left>mdi-face</v-icon>
-              <strong>Sign Up</strong>
-            </span>
-          </v-btn>
-        </v-flex>
-        <v-flex  class="text-center">
-          <v-btn text to="/signin">
-            <span>
-              <v-icon small left>mdi-lock</v-icon>
-              <strong>Sign In</strong>
-            </span>
-          </v-btn>
-        </v-flex>
+          <v-flex class="text-center">
+            <v-btn text to="/signup">
+              <span>
+                <v-icon small left>mdi-face</v-icon>
+                <strong>Sign Up</strong>
+              </span>
+            </v-btn>
+          </v-flex>
+          <v-flex class="text-center">
+            <v-btn text to="/signin">
+              <span>
+                <v-icon small left>mdi-lock</v-icon>
+                <strong>Sign In</strong>
+              </span>
+            </v-btn>
+          </v-flex>
         </template>
       </v-layout>
     </v-app-bar>
@@ -100,23 +100,28 @@
 <script>
 export default {
   props: {
-    source: String
+    // source: String
   },
   data() {
     return {
-      drawer: false,
+      drawer: false
     };
   },
-   computed: {
-    getUser(){
+  computed: {
+    getUser() {
       return this.$store.getters.user;
     }
-  }
-  ,
-  mounted() {
-    if(this.getUser == null && this.getUser == undefined){
-      this.$router.push('/signin');
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch("logout");
+      this.$router.push("/signin");
     }
   },
+  mounted() {
+    if (this.getUser == null && this.getUser == undefined) {
+      this.$router.push("/signin");
+    }
+  }
 };
 </script>

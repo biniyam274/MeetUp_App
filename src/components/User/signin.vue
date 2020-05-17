@@ -3,24 +3,27 @@
     <app-alert @dismissed="onDismissed" v-if="error" :text="error"></app-alert>
     <v-row align="center" justify="center">
       <v-col cols="12" sm="8" md="7">
-        <v-card class="elevation-12">
+        <v-card class="elevation-12"  align="center" justify="center">
           <v-toolbar color="primary" dark flat>
-            <v-toolbar-title>Login form</v-toolbar-title>
+            <v-toolbar-title>Login </v-toolbar-title>
           </v-toolbar>
           <v-card-text>
-            <v-form>
-              <v-text-field label="Login" v-model="email" type="text" />
+            <v-form ref="form" align="center" >
               <v-text-field
-                label="Password"
+                v-model="email"
+                label="E-mail"
+                required
+              ></v-text-field>
+              <v-text-field
                 v-model="password"
+                label="Password"
                 type="password"
-              />
+                required
+              ></v-text-field>
+              <v-btn color="primary" @click="signIn" :disabled="loading">Login</v-btn>
             </v-form>
           </v-card-text>
-          <v-card-actions>
-            <v-spacer />
-            <v-btn color="primary" @click="signIn" :disabled="loading">Login</v-btn>
-          </v-card-actions>
+         
         </v-card>
       </v-col>
     </v-row>
@@ -47,11 +50,7 @@ export default {
     }
   },
   watch: {
-    // user(value) {
-    //   if (value !== null && value !== undefined) {
-    //     this.$router.push("/");
-    //   }
-    // }
+    
   },
   methods: {
     signIn() {

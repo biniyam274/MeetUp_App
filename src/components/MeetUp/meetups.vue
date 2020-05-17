@@ -14,8 +14,14 @@
             <v-img
               height="80%"
               class="my-10 mx-3"
-              :src="require('@/../server/public/' + meetup.imageUrl)"
+              alt="No Image"
             ></v-img>
+             <!-- <v-img
+              height="80%"
+              class="my-10 mx-3"
+              :src="require('@/../server/public/' + meetup.imageUrl)"
+              alt="No Image"
+            ></v-img> -->
           </v-flex>
           <v-flex xs12 sm8 md6>
             <v-card-title>{{ meetup.title }}</v-card-title>

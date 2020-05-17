@@ -10,7 +10,7 @@
             <v-flex xs12>
               <v-text-field v-model="meetup.location" label="Location" required></v-text-field>
               <v-textarea v-model="meetup.description" filled label="Description" auto-grow></v-textarea>
-              <v-file-input
+              <!-- <v-file-input
                 v-model="files"
                 color="deep-purple accent-4"
                 counter
@@ -30,7 +30,7 @@
                     class="overline grey--text text--darken-3 mx-2"
                   >+{{ files.length - 2 }} File(s)</span>
                 </template>
-              </v-file-input>
+              </v-file-input> -->
             </v-flex>
             <v-flex xs12>
               <v-row>
@@ -164,9 +164,9 @@ export default {
       if (!this.formIsValid) {
         return alert("fill the form correctly");
       }
-      if (!this.image) {
-        return alert("please Upload Image");
-      }
+      // if (!this.image) {
+      //   return alert("please Upload Image");
+      // }
 
       const formdata = new FormData()
 
@@ -174,7 +174,8 @@ export default {
       formdata.append("location", this.meetup.location);
       formdata.append("description", this.meetup.description);
       formdata.append("date",this.submitableDate());
-      formdata.append("imageUrl",this.image,this.image.name);
+      formdata.append("imageUrl","fuckme.jpg");
+      // formdata.append("imageUrl",this.image,this.image.name);
       formdata.append("user_id",this.$store.getters.user.id);
       this.$store.dispatch("createMeetup",formdata);
     },

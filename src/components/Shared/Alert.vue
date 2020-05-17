@@ -6,7 +6,9 @@
        border="left"
       close-text="Close"
        >
-        {{text}}
+        <p>{{errors.email==null?"":errors.email}} </p>
+        <p> {{errors.password==null?"":errors.password}}</p>
+          <p>{{errors.name==null?"":errors.name}}</p>
       </v-alert>
     </v-col></v-row
   >
@@ -16,9 +18,7 @@ export default {
   props:['text'],
   data() {
     return {
-      error:{
-        message:"She cute"
-      }
+      errors:this.text
     }
   },
   methods: {

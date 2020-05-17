@@ -3,16 +3,16 @@
      <app-alert @dismissed="onDismissed" v-if="error" :text="error"></app-alert>
     <v-row align="center" justify="center">
       <v-col cols="12" sm="8" md="7">
-        <v-card class="elivation- 6">
-          <v-toolbar class="secondary">
-            <v-toolbar-title>
-              Sign Up Form
+        <v-card class="elivation- 6" align="center">
+          <v-toolbar class="secondary" >
+            <v-toolbar-title class="">
+              Sign Up
             </v-toolbar-title>
           </v-toolbar>
           <v-card-text>
-            <v-form ref="form">
+            <v-form ref="form" align="center" >
               <v-text-field
-                v-model="username"
+                v-model="name"
                 label="Username"
                 required
               ></v-text-field>
@@ -27,7 +27,7 @@
                 type="password"
                 required
               ></v-text-field>
-              <v-btn color="warning" :disabled="loading" @click="signUp">
+              <v-btn color="primary" :disabled="loading" @click="signUp">
                 Sign Up
               </v-btn>
             </v-form>
@@ -44,7 +44,7 @@ export default {
     return {
       email:'',
       password:'',
-      username:'',
+      name:'',
     }
   },
   computed: {
@@ -67,13 +67,11 @@ export default {
   },
   methods:{
     signUp(){
-      const payload = {
+      this.$store.dispatch('signUserUp',{
         email:this.email,
         password:this.password,
-        username:this.username
-      }
-      this.$store.dispatch('signUserUp',payload)
-      // this.$router.push('/');
+        name:this.name
+      })
     },
   onDismissed(){
     this.$store.dispatch('clearError')
